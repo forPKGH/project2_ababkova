@@ -1,4 +1,10 @@
-fun num1(lines: String, columns: String) {
+fun num1() {
+    println("Программа выполняет подсчитывает количество различных цифр в массиве, значения которого вводятся с клавиатуры.")
+    println("Введите количество строк в матрице: ")
+    val lines = readln()
+    println("Введите количество столбцов в матрице: ")
+    val columns = readln()
+
     val arr: Array<Array<String>> = Array(lines.toInt()) { i ->
         Array(columns.toInt()) { j ->
             println("Введите значение для строки ${i + 1}, столбца ${j + 1}: ")
@@ -25,6 +31,8 @@ fun num1(lines: String, columns: String) {
 }
 
 fun num2() {
+    println("Программа определяет симметричен ли массив размером 5х5 относительно главной диагонали.")
+
     val arr: Array<Array<String>> = Array(5) { i ->
         Array(5) { j ->
             println("Введите значение для строки ${i + 1} столбца ${j + 1}: ")
@@ -63,6 +71,10 @@ fun num3() {
         alphabet[i] to numbers[i]
     }
 
+    val reverseChypher = numbers.indices.associate { i ->
+        numbers[i] to alphabet[i]
+    }
+
     var action = "-1"
     while (action != "З" && action != "Р") {
         println("Введите з чтобы зашифровать или р чтобы расшифровать")
@@ -72,61 +84,71 @@ fun num3() {
     var keyWord = ""
 
     while (keyWord.isEmpty()) {
-        println("Ключевое слово и текст не могут быть пустыми")
         println("Введите ключевое слово: ")
         keyWord = readln().uppercase()
+
+        if (keyWord.isEmpty()) {
+            println("Ключевое слово может быть пустым")
+        }
     }
 
     var word = ""
 
     while (word.isEmpty()) {
-        println("Ключевое слово и текст не могут быть пустыми")
         println("Введите текст: ")
         word = readln().uppercase()
+
+        if (word.isEmpty()) {
+            println("Текст не может быть пустым")
+        }
     }
 
     when (action) {
         "З" -> {
-            for (i in 0 until word.length) {
+            for (i in word.indices) {
                 val keyWordIndex = i % keyWord.length
                 val keyLetter = keyWord[keyWordIndex]
-                var wordLetter = word[i]
+                val wordLetter = word[i]
 
-                val cypherKeyLetterIndex = cypher[keyLetter]
-                val cypherWordLetterIndex = cypher[wordLetter]
+                val cypherKeyLetterIndex = cypher[keyLetter] ?: 0
+                val cypherWordLetterIndex = cypher[wordLetter] ?: 0
 
-                var encryptedWordLetterIndex = ((cypherWordLetterIndex ?: 0) + (cypherKeyLetterIndex ?: 0)) % 33
+                var encryptedWordLetterIndex = (cypherWordLetterIndex + cypherKeyLetterIndex) % 33
 
-                if(((cypherWordLetterIndex ?: 0) + (cypherKeyLetterIndex ?: 0)) % 33 == 0)
-                encryptedWordLetterIndex = 1
+                if(encryptedWordLetterIndex == 0)
+                encryptedWordLetterIndex = 33
 
-                val encryptedWordLetter = cypher.entries.find { it.value == encryptedWordLetterIndex }
-                result += encryptedWordLetter?.key
+                val encryptedWordLetter = reverseChypher[encryptedWordLetterIndex]
+
+                result += encryptedWordLetter
             }
             println("Результат шифрования: $result")
         }
 
         "Р" -> {
-            for (i in 0 until word.length) {
+            for (i in word.indices) {
                 val keyWordIndex = i % keyWord.length
                 val keyLetter = keyWord[keyWordIndex]
-                var wordLetter = word[i]
+                val wordLetter = word[i]
 
-                val cypherKeyLetterIndex = cypher[keyLetter]
-                val cypherWordLetterIndex = cypher[wordLetter]
+                val cypherKeyLetterIndex = cypher[keyLetter] ?: 0
+                val cypherWordLetterIndex = cypher[wordLetter] ?: 0
 
-                var encryptedWordLetterIndex = (((cypherKeyLetterIndex ?: 0) - (cypherWordLetterIndex ?: 0)) + 33) % 33
+                var decryptedWordLetterIndex = (cypherWordLetterIndex - cypherKeyLetterIndex + 33) % 33
+                if(decryptedWordLetterIndex == 0)
+                    decryptedWordLetterIndex = 33
 
+                val decryptedWordLetter = reverseChypher[decryptedWordLetterIndex]
 
-                val encryptedWordLetter = cypher.entries.find { it.value == encryptedWordLetterIndex }
-                result += encryptedWordLetter?.key
-            }ы
+                result += decryptedWordLetter
+            }
             println("Результат расшифрования: $result")
         }
-
-        else -> {
-        }
     }
+}
+
+fun num4 () {
+
 }
 fun main() {
     while (true) {
@@ -138,21 +160,23 @@ fun main() {
             }
 
             "1" -> {
-                println("Программа выполняет подсчитывает количество различных цифр в массиве, значения которого вводятся с клавиатуры.")
-                println("Введите количество строк в матрице: ")
-                val lines = readln()
-                println("Введите количество столбцов в матрице: ")
-                val columns = readln()
-                num1(lines, columns)
+                num1()
             }
 
             "2" -> {
-                println("Программа определяет симметричен ли массив размером 5х5 относительно главной диагонали.")
                 num2()
             }
 
             "3" -> {
                 num3()
+            }
+
+            "4" -> {
+                num4()
+            }
+
+            "5" -> {
+//                num5()
             }
 
             else -> println(
