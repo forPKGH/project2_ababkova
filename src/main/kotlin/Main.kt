@@ -1,33 +1,50 @@
 fun num1() {
-    println("Программа выполняет подсчитывает количество различных цифр в массиве, значения которого вводятся с клавиатуры.")
-    println("Введите количество строк в матрице: ")
-    val lines = readln()
-    println("Введите количество столбцов в матрице: ")
-    val columns = readln()
+    println("Программа подсчитывает количество различных символов в массиве, значения которого вводятся с клавиатуры.")
+    var rows = ""
+    var columns = ""
+    while (true) {
+        println("Введите количество строк в массиве: ")
+        rows = readln()
+        if(rows.toIntOrNull() == null || rows.toIntOrNull() == 0) {
+            println("Неверное количество строк")
+        } else {
+            break
+        }
+    }
 
-    val arr: Array<Array<String>> = Array(lines.toInt()) { i ->
+    while (true) {
+        println("Введите количество столбцов в массиве: ")
+        columns = readln()
+        if(columns.toIntOrNull() == null || columns.toIntOrNull() == 0) {
+            println("Неверное количество столбцов")
+        } else {
+            break
+        }
+    }
+
+    val arr: Array<Array<String>> = Array(rows.toInt()) { i ->
         Array(columns.toInt()) { j ->
             println("Введите значение для строки ${i + 1}, столбца ${j + 1}: ")
             readln()
         }
     }
 
-    val uniqueDigits: MutableSet<String> = mutableSetOf()
+    val uniqueDigits: MutableSet<Char> = mutableSetOf()
     println("\nВаш массив: ")
     for (i in arr.indices) {
         for (j in arr[i].indices) {
             print(arr[i][j].padEnd(5) + " ")
-            arr[i][j].split("").forEach { item -> uniqueDigits.add(item) }
+            arr[i][j].toCharArray().forEach { item -> uniqueDigits.add(item) }
         }
         println()
     }
 
-    print("\nУникальные цифры в массиве: ")
+    print("\nУникальные символы в массиве: ")
     for (i in uniqueDigits) {
         print("$i ")
     }
 
-    println("\nКоличество уникальных цифр в массиве: ${uniqueDigits.size - 1}\n")
+    println("\nКоличество уникальных символов в массиве: ${uniqueDigits.size}\n")
 }
 
 fun num2() {
@@ -42,14 +59,14 @@ fun num2() {
 
     println("\nВаш массив: ")
     for (i in arr.indices) {
-        for (j in i + 1 until arr[i].size) {
+        for (j in arr.indices) {
             print(arr[i][j].padEnd(5) + " ")
         }
         println()
     }
 
     for (i in arr.indices) {
-        for (j in arr[i].indices) {
+        for (j in i+1 until arr.size) {
             if (arr[i][j] != arr[j][i]) {
                 println("\nМассив НЕ симметричен относительно главной диагонали\n")
                 return
@@ -75,7 +92,7 @@ fun num3() {
         numbers[i] to alphabet[i]
     }
 
-    var action = "-1"
+    var action = ""
     while (action != "З" && action != "Р") {
         println("Введите з чтобы зашифровать или р чтобы расшифровать")
         action = readln().uppercase()
@@ -83,24 +100,28 @@ fun num3() {
 
     var keyWord = ""
 
-    while (keyWord.isEmpty()) {
+    while (true) {
         println("Введите ключевое слово: ")
-        keyWord = readln().uppercase()
+        keyWord = readln().uppercase().replace(" ", "")
 
         if (keyWord.isEmpty()) {
-            println("Ключевое слово может быть пустым")
-        }
+            println("Ключевое слово не может быть пустым")
+        } else if (keyWord.contains(Regex("[^А-ЯЁа-яё]"))) {
+            println("Программа работает только с кириллицей")
+        } else break
     }
 
     var word = ""
 
-    while (word.isEmpty()) {
-        println("Введите текст: ")
-        word = readln().uppercase()
+    while (true) {
+        println("Введите слово: ")
+        word = readln().uppercase().replace(" ", "")
 
         if (word.isEmpty()) {
-            println("Текст не может быть пустым")
-        }
+            println("Слово не может быть пустым")
+        } else if (word.contains(Regex("[^А-ЯЁа-яё]"))) {
+            println("Программа работает только с кириллицей")
+        } else break
     }
 
     when (action) {
@@ -148,9 +169,71 @@ fun num3() {
 }
 
 fun num4 () {
+    println("Программа ищет пересечения числовых массивов. Пример: [1, 2, 3, 2, 0] и [5, 1, 2, 7, 3, 2, 2] -> [1, 2, 2, 3]")
 
+    val arr1 = mutableListOf<Int>()
+    val arr2 = mutableListOf<Int>()
+    val result = mutableListOf<Int>()
+
+    var input = ""
+
+    println("Введите числа первого массива. Чтобы ввести число нажмите Enter. Чтобы завершить ввод введите \\: ")
+    while (true) {
+        input = readln()
+        if (input == "\\") break
+        arr1.add(input.toIntOrNull() ?: 0)
+    }
+
+    println("Введите числа второго массива. Чтобы ввести число нажмите Enter. Чтобы завершить ввод введите \\: ")
+    while (true) {
+        input = readln()
+        if (input == "\\") break
+        arr2.add(input.toIntOrNull() ?: 0)
+    }
+
+    for (i in arr1) {
+        for (j in arr2) {
+            if (i == j) {
+                result.add(i)
+                arr2.remove(j)
+               break
+            }
+        }
+    }
+
+    println(result.sorted())
+}
+
+fun num5 () {
+    println("Программа ищет группы слов из одинаковых букв. \" Пример: [\"eat\", \"tea\", \"tan\", \"ate\", \"nat\", \"bat\"] -> \n\"ate\", \"eat\", \"tea\"\n\"nat\", \"tan\"\n\"bat\" ")
+    println("Введите слова. Чтобы ввести слово нажмите Enter. Чтобы завершить ввод введите \\.")
+
+    val words = mutableListOf<String>()
+    val groups = mutableMapOf<String, MutableList<String>>()
+
+    var input = ""
+    while (true) {
+        input = readln()
+        if (input == "\\") break
+        words.add(input.replace(" ", ""))
+    }
+
+    for (word in words) {
+        val keyWord = word.toCharArray().sorted().joinToString("")
+
+        if (groups.containsKey(keyWord)) {
+            groups[keyWord]?.add(word)
+        } else {
+            groups[keyWord] = mutableListOf(word)
+        }
+    }
+
+    for (group in groups.values) {
+        println(group)
+    }
 }
 fun main() {
+
     while (true) {
         println("Введите номер задачи (1-5) или 0 чтобы завершить")
         when (readln()) {
@@ -176,7 +259,7 @@ fun main() {
             }
 
             "5" -> {
-//                num5()
+                num5()
             }
 
             else -> println(
