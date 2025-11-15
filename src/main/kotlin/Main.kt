@@ -1,5 +1,5 @@
 fun num1() {
-    println("Программа подсчитывает количество различных символов в массиве, значения которого вводятся с клавиатуры.")
+    println("Программа подсчитывает количество различных цифр в массиве, значения которого вводятся с клавиатуры.")
     var rows = ""
     var columns = ""
     while (true) {
@@ -22,19 +22,31 @@ fun num1() {
         }
     }
 
-    val arr: Array<Array<String>> = Array(rows.toInt()) { i ->
-        Array(columns.toInt()) { j ->
+    val arr: Array<Array<Int>> = 
+    var item = 0
+    for (i in rows) {
+        for (j in columns) {
             println("Введите значение для строки ${i + 1}, столбца ${j + 1}: ")
-            readln()
+            item = readln()
+            if(item.toIntOrNull() != null) {
+                arr[i][j] = item
+            }
         }
     }
+
+//    val arr: Array<Array<Int>> = Array(rows.toInt()) { i ->
+//        Array(columns.toInt()) { j ->
+//
+//            readln().toIntOrNull()
+//        }
+//    }
 
     val uniqueDigits: MutableSet<Char> = mutableSetOf()
     println("\nВаш массив: ")
     for (i in arr.indices) {
         for (j in arr[i].indices) {
-            print(arr[i][j].padEnd(5) + " ")
-            arr[i][j].toCharArray().forEach { item -> uniqueDigits.add(item) }
+            print(arr[i][j].toString().padEnd(5) + " ")
+            arr[i][j].toString().toCharArray().forEach { item -> uniqueDigits.add(item) }
         }
         println()
     }
@@ -94,7 +106,7 @@ fun num3() {
 
     var action = ""
     while (action != "З" && action != "Р") {
-        println("Введите з чтобы зашифровать или р чтобы расшифровать")
+        println("Введите З чтобы зашифровать или Р чтобы расшифровать")
         action = readln().uppercase()
     }
 
@@ -156,6 +168,7 @@ fun num3() {
                 val cypherWordLetterIndex = cypher[wordLetter] ?: 0
 
                 var decryptedWordLetterIndex = (cypherWordLetterIndex - cypherKeyLetterIndex + 33) % 33
+
                 if(decryptedWordLetterIndex == 0)
                     decryptedWordLetterIndex = 33
 
@@ -171,8 +184,8 @@ fun num3() {
 fun num4 () {
     println("Программа ищет пересечения числовых массивов. Пример: [1, 2, 3, 2, 0] и [5, 1, 2, 7, 3, 2, 2] -> [1, 2, 2, 3]")
 
-    val arr1 = mutableListOf<Int>()
-    val arr2 = mutableListOf<Int>()
+    val list1 = mutableListOf<Int>()
+    val list2 = mutableListOf<Int>()
     val result = mutableListOf<Int>()
 
     var input = ""
@@ -181,21 +194,21 @@ fun num4 () {
     while (true) {
         input = readln()
         if (input == "\\") break
-        arr1.add(input.toIntOrNull() ?: 0)
+        list1.add(input.toIntOrNull() ?: 0)
     }
 
     println("Введите числа второго массива. Чтобы ввести число нажмите Enter. Чтобы завершить ввод введите \\: ")
     while (true) {
         input = readln()
         if (input == "\\") break
-        arr2.add(input.toIntOrNull() ?: 0)
+        list2.add(input.toIntOrNull() ?: 0)
     }
 
-    for (i in arr1) {
-        for (j in arr2) {
+    for (i in list1) {
+        for (j in list2) {
             if (i == j) {
                 result.add(i)
-                arr2.remove(j)
+                list2.remove(j)
                break
             }
         }
@@ -206,11 +219,11 @@ fun num4 () {
 
 fun num5 () {
     println("Программа ищет группы слов из одинаковых букв. \" Пример: [\"eat\", \"tea\", \"tan\", \"ate\", \"nat\", \"bat\"] -> \n\"ate\", \"eat\", \"tea\"\n\"nat\", \"tan\"\n\"bat\" ")
-    println("Введите слова. Чтобы ввести слово нажмите Enter. Чтобы завершить ввод введите \\.")
 
     val words = mutableListOf<String>()
     val groups = mutableMapOf<String, MutableList<String>>()
 
+    println("Введите слова. Чтобы ввести слово нажмите Enter. Чтобы завершить ввод введите \\.")
     var input = ""
     while (true) {
         input = readln()
