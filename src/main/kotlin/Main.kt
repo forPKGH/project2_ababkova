@@ -22,24 +22,22 @@ fun num1() {
         }
     }
 
-    val arr: Array<Array<Int>> = 
-    var item = 0
-    for (i in rows) {
-        for (j in columns) {
-            println("Введите значение для строки ${i + 1}, столбца ${j + 1}: ")
-            item = readln()
-            if(item.toIntOrNull() != null) {
-                arr[i][j] = item
+    val arr: Array<Array<Int>> = Array(rows.toInt()) {Array(columns.toInt()) {0}}
+
+    for (i in 0 until rows.toInt()) {
+        for (j in 0 until columns.toInt()) {
+            while (true) {
+                println("Введите значение для строки ${i+1} столбца ${j+1}")
+                val item = readln()
+                if(item.toIntOrNull() == null) {
+                    println("Ошибка ввода данных ")
+                } else {
+                    arr[i][j] = item.toInt()
+                    break
+                }
             }
         }
     }
-
-//    val arr: Array<Array<Int>> = Array(rows.toInt()) { i ->
-//        Array(columns.toInt()) { j ->
-//
-//            readln().toIntOrNull()
-//        }
-//    }
 
     val uniqueDigits: MutableSet<Char> = mutableSetOf()
     println("\nВаш массив: ")
@@ -51,12 +49,12 @@ fun num1() {
         println()
     }
 
-    print("\nУникальные символы в массиве: ")
+    print("\nУникальные цифры в массиве: ")
     for (i in uniqueDigits) {
         print("$i ")
     }
 
-    println("\nКоличество уникальных символов в массиве: ${uniqueDigits.size}\n")
+    println("\nКоличество уникальных цифр в массиве: ${uniqueDigits.size}\n")
 }
 
 fun num2() {
@@ -194,14 +192,30 @@ fun num4 () {
     while (true) {
         input = readln()
         if (input == "\\") break
-        list1.add(input.toIntOrNull() ?: 0)
+        while (true) {
+            if(input.toIntOrNull() == null) {
+                println("Ошибка ввода данных, попробуйте ещё раз")
+                break
+            } else {
+                list1.add(input.toIntOrNull() ?: 0)
+                break
+            }
+        }
     }
 
     println("Введите числа второго массива. Чтобы ввести число нажмите Enter. Чтобы завершить ввод введите \\: ")
     while (true) {
         input = readln()
         if (input == "\\") break
-        list2.add(input.toIntOrNull() ?: 0)
+        while (true) {
+            if(input.toIntOrNull() == null) {
+                println("Ошибка ввода данных, попробуйте ещё раз")
+                break
+            } else {
+                list2.add(input.toIntOrNull() ?: 0)
+                break
+            }
+        }
     }
 
     for (i in list1) {
