@@ -30,7 +30,7 @@ fun num1() {
                 println("Введите значение для строки ${i+1} столбца ${j+1}")
                 val item = readln()
                 if(item.toIntOrNull() == null) {
-                    println("Ошибка ввода данных")
+                    println("Ошибка ввода данных ")
                 } else {
                     arr[i][j] = item.toInt()
                     break
